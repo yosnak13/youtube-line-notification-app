@@ -23,6 +23,11 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	}, nil
 }
 
+func invokeFromEventBridge(event events.CloudWatchEvent) (string, error) {
+	fmt.Println("Received event:", event)
+	return "Hello, World!", nil
+}
+
 func main() {
 	lambda.Start(handler)
 }
