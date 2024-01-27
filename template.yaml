@@ -17,7 +17,7 @@ Resources:
       BuildMethod: go1.x
     Properties:
       CodeUri: line-notification/
-      Handler: line-notification
+      Handler: bootstrap
       Runtime: provided.al2023
       Architectures:
         - x86_64
