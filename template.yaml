@@ -21,6 +21,9 @@ Resources:
       Runtime: provided.al2023
       Architectures:
         - x86_64
+      Environment:
+        Variables:
+          API_KEY: AIzaSyB5vYTB8j_NJxn88TK3TJ6vQsDmGuKaspI
       Events:
         ScheduledEventBridgeRule:
           Type: Schedule
