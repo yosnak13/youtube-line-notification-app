@@ -38,9 +38,13 @@ func handler() {
 	}
 
 	for _, item := range response.Items {
-		videoID := item.Id.VideoId
-		title := item.Snippet.Title
-		fmt.Printf("Title: %s, Video ID: %s\n", title, videoID)
+		videoTitle := item.Snippet.Title
+		thumbnails := item.Snippet.Thumbnails
+		channelTitle := item.Snippet.ChannelTitle
+
+		fmt.Printf("Title: %s\n", videoTitle)
+		fmt.Printf("Thumbnail URL: %s\n", thumbnails.Default.Url)
+		fmt.Printf("Channel Name: %s\n", channelTitle)
 	}
 }
 
