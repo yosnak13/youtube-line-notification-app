@@ -5,6 +5,7 @@ codeuri = "/Users/yoshi/aws_sam/youtube-line-notification-app/line-notification"
 runtime = "provided.al2023"
 architecture = "x86_64"
 handler = "line-notification"
+source_hash = "687e01aa17262adb00ca0e7ad149ede9ca816f80b356ac6463e9e38c8d26d0a3"
 manifest_hash = ""
 packagetype = "Zip"
 functions = ["LineNotificationFunction"]

@@ -1,0 +1,25 @@
+"{\"destination\":\"Ub67342e349b5e112c4136e7f9844c66f\",\"events\":[{\"type\":\"message\",\"message\":{\"type\":\"text\",\"id\":\"490856059746123906\",\"quoteToken\":\"aH9yTnSSiGOQAM-t2a1GTTAboWKlBO1aGarwXQ7Q2-YHbgWIeWaP_MPhNpLmOWKG6wY2sVphBpUlF9jsxFLBRYXkAVRq7pQ6sWjuxUNjRN7D59qI0Jq4WMKrM6sLQreB1n98CDfpUNCNpTVxSd-pLA\",\"text\":\"\xE3\x81\x93\xE3\x82\x93\xE3\x81\xAB\xE3\x81\xA1\xE3\x82\x89\"},\"webhookEventId\":\"01HM909DKNFD2TASX687HHQGJZ\",\"deliveryContext\":{\"isRedelivery\":false},\"timestamp\":1705404314780,\"source\":{\"type\":\"user\",\"userId\":\"U9d6a08c4e5c54a80236a62de64e435b7\"},\"replyToken\":\"aab6e0ea1c354442bdde6bf73ff8af7c\",\"mode\":\"active\"}]}"
+No template found for LineBotController#callback, rendering head :no_content
+Completed 204 No Content in 1ms (ActiveRecord: 0.0ms | Allocations: 109)	
+
+
+
+
+
+```json
+{
+  type: 'flex',
+  altText: '宿泊検索の結果です。',
+  contents:
+  {
+    type: 'carousel',
+    contents:
+    {
+      type: 'bubble',
+      hero: ヒーローブロックのオブジェクト,
+      body: ボディブロックのオブジェクト,
+      footer: フッターブロックのオブジェクト
+    }
+  }
+}
+```

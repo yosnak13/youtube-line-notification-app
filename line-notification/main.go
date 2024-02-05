@@ -1,13 +1,47 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"google.golang.org/api/youtube/v3"
+	"log"
+	"net/http"
+	"os"
 
 	"github.com/aws/aws-lambda-go/lambda"
+	"google.golang.org/api/googleapi/transport"
 )
 
 func handler() {
-	fmt.Println("Hello World")
+	var channelID string
+	flag.StringVar(&channelID, "channel", "UCPVr7clenPjpD7WNsSI3UBQ", "YouTube Channel ID") // レトルトさんのチャンネルID
+	flag.Parse()
+
+	if channelID == "" {
+		log.Fatal("Please provide a YouTube Channel ID using -channel flag")
+	}
+
+	apiKey := os.Getenv("API_KEY")
+	client := &http.Client{
+		Transport: &transport.APIKey{Key: apiKey},
+	}
+
+	service, err := youtube.New(client)
+	if err != nil {
+		log.Fatalf("Error creating new YouTube client: %v", err)
+	}
+
+	call := service.Search.List([]string{"snippet"}).ChannelId(channelID).Type("video").Order("date").MaxResults(5)
+	response, err := call.Do()
+	if err != nil {
+		log.Fatalf("Error making search API call: %v", err)
+	}
+
+	for _, item := range response.Items {
+		videoID := item.Id.VideoId
+		title := item.Snippet.Title
+		fmt.Printf("Title: %s, Video ID: %s\n", title, videoID)
+	}
 }
 
 func main() {
