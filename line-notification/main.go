@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"google.golang.org/api/youtube/v3"
 	"log"
@@ -13,12 +12,11 @@ import (
 )
 
 func handler() {
-	var channelID string
-	flag.StringVar(&channelID, "channel", "UCPVr7clenPjpD7WNsSI3UBQ", "YouTube Channel ID") // レトルトさんのチャンネルID
-	flag.Parse()
-
-	if channelID == "" {
-		log.Fatal("Please provide a YouTube Channel ID using -channel flag")
+	channelIDs := []string{
+		"UCPVr7clenPjpD7WNsSI3UBQ", // レトルト
+		"UCZMRuagdTBKmmrFtSMN48Xw", // 牛沢
+		"UCWcEgYIOqq1BVr4Qm1sPuVg", // ガッチマン
+		// 追加のチャンネルIDをここに追加
 	}
 
 	apiKey := os.Getenv("API_KEY")
@@ -31,20 +29,24 @@ func handler() {
 		log.Fatalf("Error creating new YouTube client: %v", err)
 	}
 
-	call := service.Search.List([]string{"snippet"}).ChannelId(channelID).Type("video").Order("date").MaxResults(5)
-	response, err := call.Do()
-	if err != nil {
-		log.Fatalf("Error making search API call: %v", err)
-	}
+	for _, channelID := range channelIDs {
+		call := service.Search.List([]string{"snippet"}).ChannelId(channelID).Type("video").Order("date").MaxResults(1)
+		response, err := call.Do()
+		if err != nil {
+			log.Fatalf("Error making search API call for channel %s: %v", channelID, err)
+		}
 
-	for _, item := range response.Items {
-		videoTitle := item.Snippet.Title
-		thumbnails := item.Snippet.Thumbnails
-		channelTitle := item.Snippet.ChannelTitle
+		for _, item := range response.Items {
+			videoTitle := item.Snippet.Title
+			thumbnails := item.Snippet.Thumbnails
+			channelTitle := item.Snippet.ChannelTitle
 
-		fmt.Printf("Title: %s\n", videoTitle)
-		fmt.Printf("Thumbnail URL: %s\n", thumbnails.Default.Url)
-		fmt.Printf("Channel Name: %s\n", channelTitle)
+			fmt.Printf("Channel ID: %s\n", channelID)
+			fmt.Printf("Title: %s\n", videoTitle)
+			fmt.Printf("Thumbnail URL: %s\n", thumbnails.Default.Url)
+			fmt.Printf("Channel Name: %s\n", channelTitle)
+			fmt.Println()
+		}
 	}
 }
 
