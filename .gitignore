@@ -6,3 +6,4 @@
 
 ## aws template
 template.yaml
+.aws-sam/build/template.yaml
