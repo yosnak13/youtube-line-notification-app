@@ -68,25 +68,10 @@ func main() {
 // MEMO: 徐々に切り出していく
 
 type Message struct {
-	Type   string       `json:"type"`
-	Hero   Hero         `json:"hero"`
-	Body   Body         `json:"body"`
-	Footer model.Footer `json:"footer"`
-}
-
-type Hero struct {
-	Type        string `json:"type"`
-	URL         string `json:"url"`
-	Size        string `json:"size"`
-	AspectRatio string `json:"aspectRatio"`
-	AspectMode  string `json:"aspectMode"`
-	Action      Action `json:"action"`
-}
-
-type Action struct {
-	Type  string `json:"type"`
-	URI   string `json:"uri"`
-	Label string `json:"label,omitempty"`
+	Type   string        `json:"type"`
+	Hero   *model.Hero   `json:"hero"`
+	Body   Body          `json:"body"`
+	Footer *model.Footer `json:"footer"`
 }
 
 type Body struct {
@@ -96,20 +81,20 @@ type Body struct {
 }
 
 type Content struct {
-	Type     string    `json:"type"`
-	Text     string    `json:"text,omitempty"`
-	Weight   string    `json:"weight,omitempty"`
-	Size     string    `json:"size,omitempty"`
-	Wrap     bool      `json:"wrap,omitempty"`
-	Layout   string    `json:"layout,omitempty"`
-	Margin   string    `json:"margin,omitempty"`
-	Spacing  string    `json:"spacing,omitempty"`
-	Color    string    `json:"color,omitempty"`
-	Flex     int       `json:"flex,omitempty"`
-	Action   Action    `json:"action,omitempty"`
-	Contents []Content `json:"contents,omitempty"`
-	Style    string    `json:"style,omitempty"`
-	Height   string    `json:"height,omitempty"`
+	Type     string        `json:"type"`
+	Text     string        `json:"text,omitempty"`
+	Weight   string        `json:"weight,omitempty"`
+	Size     string        `json:"size,omitempty"`
+	Wrap     bool          `json:"wrap,omitempty"`
+	Layout   string        `json:"layout,omitempty"`
+	Margin   string        `json:"margin,omitempty"`
+	Spacing  string        `json:"spacing,omitempty"`
+	Color    string        `json:"color,omitempty"`
+	Flex     int           `json:"flex,omitempty"`
+	Action   *model.Action `json:"action,omitempty"`
+	Contents []Content     `json:"contents,omitempty"`
+	Style    string        `json:"style,omitempty"`
+	Height   string        `json:"height,omitempty"`
 }
 
 func buildJson() *Message {
@@ -117,22 +102,12 @@ func buildJson() *Message {
 	channelName := "channelTitle"
 	videoURL := "https://www.youtube.com"
 
-	footer := *model.NewFooter()
 	hero := *model.NewHero(thumbnailURL, videoURL)
+	footer := *model.NewFooter()
 
 	return &Message{
 		Type: "bubble",
-		Hero: Hero{
-			Type:        "image",
-			URL:         thumbnailURL,
-			Size:        "full",
-			AspectRatio: "20:13",
-			AspectMode:  "cover",
-			Action: Action{
-				Type: "uri",
-				URI:  videoURL,
-			},
-		},
+		Hero: &hero,
 		Body: Body{
 			Type:   "box",
 			Layout: "vertical",
@@ -191,9 +166,9 @@ func buildJson() *Message {
 									Color: "#666666",
 									Size:  "sm",
 									Flex:  5,
-									Action: Action{
+									Action: &model.Action{
 										Type: "uri",
-										URI:  videoURL,
+										Uri:  videoURL,
 									},
 								},
 							},
@@ -202,6 +177,6 @@ func buildJson() *Message {
 				},
 			},
 		},
-		Footer: footer,
+		Footer: &footer,
 	}
 }

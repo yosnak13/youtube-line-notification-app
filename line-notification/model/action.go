@@ -2,21 +2,21 @@ package model
 
 type Action struct {
 	Type  string `json:"type"`
-	Label string `json:"label.omitempty"`
-	URL   string `json:"url"`
+	Label string `json:"label,omitempty"`
+	Uri   string `json:"uri"`
 }
 
-func NewAction(url string) *Action {
+func NewAction(uri string) *Action {
 	return &Action{
-		Type: "url",
-		URL:  url,
+		Type: "uri",
+		Uri:  uri,
 	}
 }
 
 func NewActionForFooter() *Action {
 	return &Action{
-		Type:  "url",
+		Type:  "uri",
 		Label: "YouTubeトップへ",
-		URL:   "https://youtube.com",
+		Uri:   "https://youtube.com",
 	}
 }
