@@ -1,17 +1,17 @@
 package model
 
 type FooterContent struct {
-	Type   string `json:"type"`
-	Style  string `json:"style"`
-	Height string `json:"height"`
-	Action Action `json:"action"`
+	Type   string  `json:"type"`
+	Style  string  `json:"style"`
+	Height string  `json:"height"`
+	Action *Action `json:"action"`
 }
 
-func NewFooterContent() *FooterContent {
+func NewFooterContent(footerType string, style string, height string, action *Action) *FooterContent {
 	return &FooterContent{
-		Type:   "button",
-		Style:  "link",
-		Height: "sm",
-		Action: *NewActionForFooter(),
+		Type:   footerType,
+		Style:  style,
+		Height: height,
+		Action: action,
 	}
 }

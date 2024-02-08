@@ -42,11 +42,15 @@ func handler() {
 			videoTitle := item.Snippet.Title
 			thumbnails := item.Snippet.Thumbnails
 			channelTitle := item.Snippet.ChannelTitle
+			videoID := item.Id.VideoId
 
 			fmt.Printf("Channel ID: %s\n", channelID)
 			fmt.Printf("Title: %s\n", videoTitle)
 			fmt.Printf("Thumbnail URL: %s\n", thumbnails.Default.Url)
 			fmt.Printf("Channel Name: %s\n", channelTitle)
+			videoURL := fmt.Sprintf("https://www.youtube.com/watch?v=%s", videoID)
+			fmt.Printf("Video URL: %s\n", videoURL)
+
 			fmt.Println()
 		}
 	}
@@ -103,7 +107,7 @@ func buildJson() *Message {
 	videoURL := "https://www.youtube.com"
 
 	hero := *model.NewHero(thumbnailURL, videoURL)
-	footer := *model.NewFooter()
+	footer := buildFooter()
 
 	return &Message{
 		Type: "bubble",
@@ -177,6 +181,27 @@ func buildJson() *Message {
 				},
 			},
 		},
-		Footer: &footer,
+		Footer: footer,
 	}
+}
+
+func buildFooter() *model.Footer {
+	typeOfAction := "uri"
+	label := "Youtubeトップへ"
+	uri := "https://youtube.com"
+	action := *model.NewAction(typeOfAction, label, uri)
+
+	typeOfFooterContent := "button"
+	style := "link"
+	height := "sm"
+	footerContent := *model.NewFooterContent(typeOfFooterContent, style, height, &action)
+
+	elementType := "box"
+	layout := "vertical"
+	spacing := "sm"
+	content := []*model.FooterContent{&footerContent}
+	flex := 0
+
+	footer := *model.NewFooter(elementType, layout, spacing, content, flex)
+	return &footer
 }

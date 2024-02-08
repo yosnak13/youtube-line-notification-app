@@ -9,13 +9,13 @@ type Hero struct {
 	Action       Action `json:"action"`
 }
 
-func NewHero(thumbnail string, url string) *Hero {
+func NewHero(thumbnailUrl string, url string) *Hero {
 	return &Hero{
 		Type:         "image",
-		ThumbnailURL: thumbnail,
+		ThumbnailURL: thumbnailUrl,
 		Size:         "full",
 		AspectRatio:  "20:30",
 		AspectMode:   "cover",
-		Action:       *NewAction(url), // MEMO: Actionを知らなければならず、結合度が高くなっている
+		Action:       *NewAction("uri", "", url),
 	}
 }

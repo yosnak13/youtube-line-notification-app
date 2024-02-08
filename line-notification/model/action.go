@@ -6,17 +6,16 @@ type Action struct {
 	Uri   string `json:"uri"`
 }
 
-func NewAction(uri string) *Action {
-	return &Action{
-		Type: "uri",
-		Uri:  uri,
+func NewAction(typeForAction string, label string, uri string) *Action {
+	if label == "" {
+		return &Action{
+			Type: typeForAction,
+			Uri:  uri,
+		}
 	}
-}
-
-func NewActionForFooter() *Action {
 	return &Action{
-		Type:  "uri",
-		Label: "YouTubeトップへ",
-		Uri:   "https://youtube.com",
+		Type:  typeForAction,
+		Label: label,
+		Uri:   uri,
 	}
 }
