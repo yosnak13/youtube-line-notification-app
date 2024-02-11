@@ -7,16 +7,40 @@ import (
 )
 
 func TestNewAction(t *testing.T) {
-	typeForAction := "uri"
-	label := "YouTubeトップへ"
-	uri := "https://example.com"
-	expectedAction := &Action{
-		Type:  typeForAction,
-		Label: label,
-		Uri:   uri,
+	testCases := []struct {
+		name           string
+		typeForAction  string
+		label          string
+		uri            string
+		expectedAction *Action
+	}{
+		{
+			name:          "Type and URI only",
+			typeForAction: "url",
+			label:         "",
+			uri:           "https://example.com",
+			expectedAction: &Action{
+				Type: "url",
+				Uri:  "https://example.com",
+			},
+		},
+		{
+			name:          "All fields provided",
+			typeForAction: "uri",
+			label:         "Example",
+			uri:           "https://example.com",
+			expectedAction: &Action{
+				Type:  "uri",
+				Label: "Example",
+				Uri:   "https://example.com",
+			},
+		},
 	}
 
-	action := NewAction(typeForAction, label, uri)
-
-	assert.Equal(t, expectedAction, action)
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			action := NewAction(tc.typeForAction, tc.label, tc.uri)
+			assert.Equal(t, tc.expectedAction, action)
+		})
+	}
 }
