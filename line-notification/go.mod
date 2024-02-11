@@ -1,5 +1,6 @@
 require (
 	github.com/aws/aws-lambda-go v1.36.1
+	github.com/stretchr/testify v1.8.4
 	google.golang.org/api v0.161.0
 )
 
