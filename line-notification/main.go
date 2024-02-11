@@ -196,12 +196,12 @@ func buildFooter() *model.Footer {
 	height := "sm"
 	footerContent := *model.NewFooterContent(typeOfFooterContent, style, height, &action)
 
-	elementType := "box"
+	typeOfFooter := "box"
 	layout := "vertical"
 	spacing := "sm"
 	content := []*model.FooterContent{&footerContent}
 	flex := 0
 
-	footer := *model.NewFooter(elementType, layout, spacing, content, flex)
+	footer := *model.NewFooter(typeOfFooter, layout, spacing, content, flex)
 	return &footer
 }

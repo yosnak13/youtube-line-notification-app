@@ -10,7 +10,7 @@ func TestNewFooterContent(t *testing.T) {
 	typeOfAction := "uri"
 	label := "Youtubeトップへ"
 	uri := "https://youtube.com"
-	action := NewAction(typeOfAction, label, uri) // ポインターを解除して渡すことで、
+	action := NewAction(typeOfAction, label, uri) // ポインターを解除して渡すことで、expectとactualが使用する関数が同じアドレスの物になるようにする
 
 	typeOfFooterContent := "button"
 	style := "link"
