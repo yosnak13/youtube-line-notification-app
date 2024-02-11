@@ -1,21 +1,21 @@
 package model
 
 type Hero struct {
-	Type         string `json:"type"`
-	ThumbnailURL string `json:"url"`
-	Size         string `json:"size"`
-	AspectRatio  string `json:"aspectRatio"`
-	AspectMode   string `json:"aspectMode"`
-	Action       Action `json:"action"`
+	Type         string  `json:"type"`
+	ThumbnailURL string  `json:"url"`
+	Size         string  `json:"size"`
+	AspectRatio  string  `json:"aspectRatio"`
+	AspectMode   string  `json:"aspectMode"`
+	Action       *Action `json:"action"`
 }
 
-func NewHero(thumbnailUrl string, url string) *Hero {
+func NewHero(typeOfHero string, thumbnailUrl string, size string, aspectRatio string, aspectMode string, action *Action) *Hero {
 	return &Hero{
-		Type:         "image",
+		Type:         typeOfHero,
 		ThumbnailURL: thumbnailUrl,
-		Size:         "full",
-		AspectRatio:  "20:30",
-		AspectMode:   "cover",
-		Action:       *NewAction("uri", "", url),
+		Size:         size,
+		AspectRatio:  aspectRatio,
+		AspectMode:   aspectMode,
+		Action:       action,
 	}
 }

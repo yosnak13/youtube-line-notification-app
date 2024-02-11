@@ -102,16 +102,16 @@ type Content struct {
 }
 
 func buildJson() *Message {
-	thumbnailURL := "thumbnails"
-	channelName := "channelTitle"
-	videoURL := "https://www.youtube.com"
 
-	hero := *model.NewHero(thumbnailURL, videoURL)
+	videoURL := "https://www.youtube.com"
+	channelName := "channelTitle"
+
+	hero := buildHero()
 	footer := buildFooter()
 
 	return &Message{
 		Type: "bubble",
-		Hero: &hero,
+		Hero: hero,
 		Body: Body{
 			Type:   "box",
 			Layout: "vertical",
@@ -183,6 +183,16 @@ func buildJson() *Message {
 		},
 		Footer: footer,
 	}
+}
+
+func buildHero() *model.Hero {
+	thumbnailURL := "https://example.com"
+
+	typeOfAction := "uri"
+	uri := "https://youtube.com"
+	action := *model.NewAction(typeOfAction, "", uri)
+	hero := *model.NewHero("image", thumbnailURL, "full", "20:30", "cover", &action)
+	return &hero
 }
 
 func buildFooter() *model.Footer {
