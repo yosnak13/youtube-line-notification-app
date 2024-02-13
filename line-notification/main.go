@@ -102,16 +102,16 @@ type Content struct {
 }
 
 func buildJson() *Message {
-	thumbnailURL := "thumbnails"
-	channelName := "channelTitle"
-	videoURL := "https://www.youtube.com"
 
-	hero := *model.NewHero(thumbnailURL, videoURL)
+	videoURL := "https://www.youtube.com"
+	channelName := "channelTitle"
+
+	hero := buildHero()
 	footer := buildFooter()
 
 	return &Message{
 		Type: "bubble",
-		Hero: &hero,
+		Hero: hero,
 		Body: Body{
 			Type:   "box",
 			Layout: "vertical",
@@ -185,6 +185,16 @@ func buildJson() *Message {
 	}
 }
 
+func buildHero() *model.Hero {
+	thumbnailURL := "https://example.com"
+
+	typeOfAction := "uri"
+	uri := "https://youtube.com"
+	action := *model.NewAction(typeOfAction, "", uri)
+	hero := *model.NewHero("image", thumbnailURL, "full", "20:30", "cover", &action)
+	return &hero
+}
+
 func buildFooter() *model.Footer {
 	typeOfAction := "uri"
 	label := "Youtubeトップへ"
@@ -196,12 +206,12 @@ func buildFooter() *model.Footer {
 	height := "sm"
 	footerContent := *model.NewFooterContent(typeOfFooterContent, style, height, &action)
 
-	elementType := "box"
+	typeOfFooter := "box"
 	layout := "vertical"
 	spacing := "sm"
 	content := []*model.FooterContent{&footerContent}
 	flex := 0
 
-	footer := *model.NewFooter(elementType, layout, spacing, content, flex)
+	footer := *model.NewFooter(typeOfFooter, layout, spacing, content, flex)
 	return &footer
 }
