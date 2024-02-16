@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestNewContentOfBodyTitle(t *testing.T) {
+func TestNewContentMovieTitle(t *testing.T) {
 
 	contentType := "text"
 	text := "タイトル"
@@ -21,7 +21,11 @@ func TestNewContentOfBodyTitle(t *testing.T) {
 		Wrap:   wrap,
 	}
 
-	actual := NewContentOfBodyTitle(contentType, text, weight, size, wrap)
+	actual := NewContentMovieTitle(contentType, text, weight, size, wrap)
 
 	assert.Equal(t, expect, actual)
+}
+
+func TestNewContentBodyContainer(t *testing.T) {
+
 }
