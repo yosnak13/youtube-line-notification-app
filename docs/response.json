@@ -1,0 +1,101 @@
+{
+  "type": "bubble",
+  "hero": {
+    "type": "image",
+    "url": "https://example.com",
+    "size": "full",
+    "aspectRatio": "20:30",
+    "aspectMode": "cover",
+    "action": {
+      "type": "uri",
+      "uri": "https://youtube.com"
+    }
+  },
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "タイトル",
+        "weight": "bold",
+        "size": "xl",
+        "wrap": true
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "margin": "lg",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "baseline",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ch",
+                "size": "sm",
+                "wrap": true,
+                "color": "#aaaaaa",
+                "flex": 1
+              },
+              {
+                "type": "text",
+                "text": "channelTitle",
+                "size": "sm",
+                "wrap": true,
+                "color": "#aaaaaa",
+                "flex": 5
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "URL",
+                "size": "sm",
+                "color": "#aaaaaa",
+                "flex": 1
+              },
+              {
+                "type": "text",
+                "text": "動画はこちらをタップ",
+                "size": "sm",
+                "wrap": true,
+                "color": "#666666",
+                "flex": 5,
+                "action": {
+                  "type": "uri",
+                  "uri": "https://www.youtube.com"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "footer": {
+    "type": "box",
+    "layout": "vertical",
+    "spacing": "sm",
+    "contents": [
+      {
+        "type": "button",
+        "style": "link",
+        "height": "sm",
+        "action": {
+          "type": "uri",
+          "label": "Youtubeトップへ",
+          "uri": "https://youtube.com"
+        }
+      }
+    ],
+    "flex": 0
+  }
+}

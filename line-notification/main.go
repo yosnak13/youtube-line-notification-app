@@ -74,7 +74,7 @@ func main() {
 type Message struct {
 	Type   string        `json:"type"`
 	Hero   *model.Hero   `json:"hero"`
-	Body   Body          `json:"body"`
+	Body   *Body         `json:"body"`
 	Footer *model.Footer `json:"footer"`
 }
 
@@ -103,84 +103,14 @@ type Content struct {
 
 func buildJson() *Message {
 
-	videoURL := "https://www.youtube.com"
-	channelName := "channelTitle"
-
 	hero := buildHero()
+	body := buildBody()
 	footer := buildFooter()
 
 	return &Message{
-		Type: "bubble",
-		Hero: hero,
-		Body: Body{
-			Type:   "box",
-			Layout: "vertical",
-			Contents: []Content{
-				{
-					Type:   "text",
-					Text:   "タイトル",
-					Weight: "bold",
-					Size:   "xl",
-					Wrap:   true,
-				},
-				{
-					Type:    "box",
-					Layout:  "vertical",
-					Margin:  "lg",
-					Spacing: "sm",
-					Contents: []Content{
-						{
-							Type:   "box",
-							Layout: "baseline",
-							Contents: []Content{
-								{
-									Type:  "text",
-									Text:  "ch",
-									Flex:  1,
-									Wrap:  true,
-									Size:  "sm",
-									Color: "#aaaaaa",
-								},
-								{
-									Type:  "text",
-									Text:  channelName,
-									Flex:  5,
-									Wrap:  true,
-									Size:  "sm",
-									Color: "#aaaaaa",
-								},
-							},
-						},
-						{
-							Type:    "box",
-							Layout:  "baseline",
-							Spacing: "sm",
-							Contents: []Content{
-								{
-									Type:  "text",
-									Text:  "URL",
-									Color: "#aaaaaa",
-									Size:  "sm",
-									Flex:  1,
-								},
-								{
-									Type:  "text",
-									Text:  "動画はこちらをタップ",
-									Wrap:  true,
-									Color: "#666666",
-									Size:  "sm",
-									Flex:  5,
-									Action: &model.Action{
-										Type: "uri",
-										Uri:  videoURL,
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		},
+		Type:   "bubble",
+		Hero:   hero,
+		Body:   body,
 		Footer: footer,
 	}
 }
@@ -193,6 +123,82 @@ func buildHero() *model.Hero {
 	action := *model.NewAction(typeOfAction, "", uri)
 	hero := *model.NewHero("image", thumbnailURL, "full", "20:30", "cover", &action)
 	return &hero
+}
+
+func buildBody() *Body {
+
+	videoURL := "https://www.youtube.com"
+	channelName := "channelTitle"
+
+	return &Body{
+		Type:   "box",
+		Layout: "vertical",
+		Contents: []Content{
+			{
+				Type:   "text",
+				Text:   "タイトル",
+				Weight: "bold",
+				Size:   "xl",
+				Wrap:   true,
+			},
+			{
+				Type:    "box",
+				Layout:  "vertical",
+				Margin:  "lg",
+				Spacing: "sm",
+				Contents: []Content{
+					{
+						Type:   "box",
+						Layout: "baseline",
+						Contents: []Content{
+							{
+								Type:  "text",
+								Text:  "ch",
+								Flex:  1,
+								Wrap:  true,
+								Size:  "sm",
+								Color: "#aaaaaa",
+							},
+							{
+								Type:  "text",
+								Text:  channelName,
+								Flex:  5,
+								Wrap:  true,
+								Size:  "sm",
+								Color: "#aaaaaa",
+							},
+						},
+					},
+					{
+						Type:    "box",
+						Layout:  "baseline",
+						Spacing: "sm",
+						Contents: []Content{
+							{
+								Type:  "text",
+								Text:  "URL",
+								Color: "#aaaaaa",
+								Size:  "sm",
+								Flex:  1,
+							},
+							{
+								Type:  "text",
+								Text:  "動画はこちらをタップ",
+								Wrap:  true,
+								Color: "#666666",
+								Size:  "sm",
+								Flex:  5,
+								Action: &model.Action{
+									Type: "uri",
+									Uri:  videoURL,
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
 }
 
 func buildFooter() *model.Footer {
