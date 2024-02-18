@@ -28,4 +28,31 @@ func TestNewContentMovieTitle(t *testing.T) {
 
 func TestNewContentBodyContainer(t *testing.T) {
 
+	contentType := "text"
+	layout := "vertical"
+	margin := "lg"
+	spacing := "sm"
+	var contents []*Content
+	for i := 0; i < 2; i++ {
+		content := &Content{
+			Type:  "text",
+			Text:  "ch",
+			Flex:  i,
+			Wrap:  true,
+			Size:  "sm",
+			Color: "aaaaaa",
+		}
+		contents = append(contents, content)
+	}
+
+	expect := &Content{
+		Type:     contentType,
+		Layout:   layout,
+		Margin:   margin,
+		Spacing:  spacing,
+		Contents: contents,
+	}
+	actual := NewContentBodyContainer(contentType, layout, margin, spacing, contents)
+
+	assert.Equal(t, expect, actual)
 }
