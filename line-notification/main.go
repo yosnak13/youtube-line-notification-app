@@ -69,26 +69,13 @@ func main() {
 	lambda.Start(handler)
 }
 
-// MEMO: 徐々に切り出していく
-
-type Message struct {
-	Type   string        `json:"type"`
-	Hero   *model.Hero   `json:"hero"`
-	Body   *model.Body   `json:"body"`
-	Footer *model.Footer `json:"footer"`
-}
-
-func buildMessage() *Message {
+func buildMessage() *model.Message {
 	hero := buildHero()
 	body := buildBody()
 	footer := buildFooter()
 
-	return &Message{
-		Type:   "bubble",
-		Hero:   hero,
-		Body:   body,
-		Footer: footer,
-	}
+	message := *model.NewMessage("bubble", hero, body, footer)
+	return &message
 }
 
 func buildHero() *model.Hero {
@@ -126,76 +113,6 @@ func buildBody() *model.Body {
 
 	body := *model.NewBody("box", "vertical", bodyComponents)
 	return &body
-
-	//return &Body{
-	//	Type:   "box",
-	//	Layout: "vertical",
-	//	Contents: []Content{
-	//		{
-	//			Type:   "text",
-	//			Text:   "タイトル",
-	//			Weight: "bold",
-	//			Size:   "xl",
-	//			Wrap:   true,
-	//		},
-	//		{
-	//			Type:    "box",
-	//			Layout:  "vertical",
-	//			Margin:  "lg",
-	//			Spacing: "sm",
-	//			Contents: []Content{
-	//				{
-	//					Type:   "box",
-	//					Layout: "baseline",
-	//					Contents: []Content{
-	//						{
-	//							Type:  "text",
-	//							Text:  "ch",
-	//							Flex:  1,
-	//							Wrap:  true,
-	//							Size:  "sm",
-	//							Color: "#aaaaaa",
-	//						},
-	//						{
-	//							Type:  "text",
-	//							Text:  channelName,
-	//							Flex:  5,
-	//							Wrap:  true,
-	//							Size:  "sm",
-	//							Color: "#aaaaaa",
-	//						},
-	//					},
-	//				},
-	//				{
-	//					Type:    "box",
-	//					Layout:  "baseline",
-	//					Spacing: "sm",
-	//					Contents: []Content{
-	//						{
-	//							Type:  "text",
-	//							Text:  "URL",
-	//							Color: "#aaaaaa",
-	//							Size:  "sm",
-	//							Flex:  1,
-	//						},
-	//						{
-	//							Type:  "text",
-	//							Text:  "動画はこちらをタップ",
-	//							Wrap:  true,
-	//							Color: "#666666",
-	//							Size:  "sm",
-	//							Flex:  5,
-	//							Action: &model.Action{
-	//								Type: "uri",
-	//								Uri:  videoURL,
-	//							},
-	//						},
-	//					},
-	//				},
-	//			},
-	//		},
-	//	},
-	//}
 }
 
 func buildFooter() *model.Footer {
