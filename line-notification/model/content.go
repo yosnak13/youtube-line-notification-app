@@ -65,10 +65,10 @@ func NewContentBodyBlockUrlRoot(contentType string, layout string, spacing strin
 	}
 }
 
-func NewContentBodyBlockUrlProperty(contentType string, text string, color string, size string, flex int) *Content {
+func NewContentBodyBlockUrlProperty(contentType string, movieUrl string, color string, size string, flex int) *Content {
 	return &Content{
 		Type:  contentType,
-		Text:  text,
+		Text:  movieUrl,
 		Color: color,
 		Size:  size,
 		Flex:  flex,

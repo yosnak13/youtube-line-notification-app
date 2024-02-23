@@ -117,12 +117,12 @@ func buildBody() *model.Body {
 	channelNameComponents := []*model.Content{&channelProperty, &channelValue}
 	channelRootComponent := *model.NewContentBodyBlockChannelRoot("box", "baseline", channelNameComponents)
 
-	movieComponents := []*model.Content{&channelRootComponent, &urlRootComponent}
+	movieInfo := []*model.Content{&channelRootComponent, &urlRootComponent}
 
-	movieValue := *model.NewContentMovieValue("box", "vertical", "lg", "sm", movieComponents)
+	movieComponent := *model.NewContentMovieValue("box", "vertical", "lg", "sm", movieInfo)
 	titleComponent := *model.NewContentMovieProperty("text", "動画のタイトル", "bold", "xl", true)
 
-	bodyComponents := []*model.Content{&titleComponent, &movieValue}
+	bodyComponents := []*model.Content{&titleComponent, &movieComponent}
 
 	return &model.Body{
 		Type:     "box",
