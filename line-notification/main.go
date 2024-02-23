@@ -81,15 +81,13 @@ func buildMessage() *model.Message {
 func buildHero() *model.Hero {
 	thumbnailURL := "https://example.com"
 
-	typeOfAction := "uri"
-	uri := "https://youtube.com"
-	action := *model.NewAction(typeOfAction, "", uri)
+	movieURL := "https://youtube.com"
+	action := *model.NewAction("uri", "", movieURL)
 	hero := *model.NewHero("image", thumbnailURL, "full", "20:30", "cover", &action)
 	return &hero
 }
 
 func buildBody() *model.Body {
-
 	videoURL := "https://www.youtube.com"
 	channelName := "channelTitle"
 
@@ -116,22 +114,9 @@ func buildBody() *model.Body {
 }
 
 func buildFooter() *model.Footer {
-	typeOfAction := "uri"
-	label := "Youtubeトップへ"
-	uri := "https://youtube.com"
-	action := *model.NewAction(typeOfAction, label, uri)
-
-	typeOfFooterContent := "button"
-	style := "link"
-	height := "sm"
-	footerContent := *model.NewFooterContent(typeOfFooterContent, style, height, &action)
-
-	typeOfFooter := "box"
-	layout := "vertical"
-	spacing := "sm"
+	action := *model.NewAction("uri", "Youtubeトップへ", "https://youtube.com")
+	footerContent := *model.NewFooterContent("button", "link", "sm", &action)
 	content := []*model.FooterContent{&footerContent}
-	flex := 0
-
-	footer := *model.NewFooter(typeOfFooter, layout, spacing, content, flex)
+	footer := *model.NewFooter("box", "vertical", "sm", content, 0)
 	return &footer
 }
