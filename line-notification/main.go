@@ -55,7 +55,7 @@ func handler() {
 		}
 	}
 
-	sampleMessage := buildJson()
+	sampleMessage := buildMessage()
 	messageJSON, err := json.Marshal(sampleMessage)
 	if err != nil {
 		fmt.Println("JSON marshal error:", err)
@@ -78,7 +78,7 @@ type Message struct {
 	Footer *model.Footer `json:"footer"`
 }
 
-func buildJson() *Message {
+func buildMessage() *Message {
 	hero := buildHero()
 	body := buildBody()
 	footer := buildFooter()
@@ -124,11 +124,8 @@ func buildBody() *model.Body {
 
 	bodyComponents := []*model.Content{&titleComponent, &movieComponent}
 
-	return &model.Body{
-		Type:     "box",
-		Layout:   "vertical",
-		Contents: bodyComponents,
-	}
+	body := *model.NewBody("box", "vertical", bodyComponents)
+	return &body
 
 	//return &Body{
 	//	Type:   "box",
