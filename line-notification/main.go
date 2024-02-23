@@ -130,6 +130,28 @@ func buildBody() *Body {
 	videoURL := "https://www.youtube.com"
 	channelName := "channelTitle"
 
+	urlProperty := *model.NewContentBodyBlockUrlProperty("text", "URL", "#aaaaaa", "sm", 1)
+	urlValueAction := *model.NewAction("url", "", "movieのURL")
+	urlValue := *model.NewContentBodyBlockUrlValue("text", "動画はこちらをタップ", true, "#666666", "sm", 5, &urlValueAction)
+
+	urlComponents := []*model.Content{&urlProperty, &urlValue}
+	urlRootComponent := *model.NewContentBodyBlockUrlRoot("box", "baseline", "sm", urlComponents)
+
+	channelProperty := *model.NewContentBodyBlockChannelPropertyValue("text", "ch", 1, true, "sm", "#aaaaaa")
+	channelValue := *model.NewContentBodyBlockChannelPropertyValue("text", "チャンネル名", 5, true, "sm", "#aaaaaa")
+	channelNameComponents := []*model.Content{&channelProperty, &channelValue}
+	channelRootComponent := *model.NewContentBodyBlockChannelRoot("box", "baseline", channelNameComponents)
+
+	// titleContainer := *model.NewContentMovieTitle("text", "動画のタイトル", "bold", "xl", true)
+	// bodyParentContainer := *model.NewContentBodyContainer("box", "vertical", "lg", "sm", )
+	// var contents []model.Content
+	// contents = append(contents, titleContainer)
+
+	var movieComponents []*model.Content
+	movieComponents = append(movieComponents, &channelRootComponent)
+	movieComponents = append(movieComponents, &urlRootComponent)
+	movieValue := *model.NewContentMovieValue("box", "vertical", "lg", "sm", movieComponents)
+
 	return &Body{
 		Type:   "box",
 		Layout: "vertical",
