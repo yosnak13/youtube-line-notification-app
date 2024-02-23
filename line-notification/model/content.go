@@ -15,6 +15,85 @@ type Content struct {
 	Contents []*Content `json:"contents,omitempty"`
 	Style    string     `json:"style,omitempty"`
 	Height   string     `json:"height,omitempty"`
+
+	/*
+		Content構造体はBody構造体の部品に使われており、下記のようなContentの配列をいくつも抱える構造をしている。
+		同名プロパティが存在するため、omitemptyを活用し、必要なプロパティのみ引数で必要とするコンストラクタを必要なだけ作成し、
+		それで生成されたインスタンスを配列に格納することを繰り返して、以下の構造体を作る。
+	*/
+
+	/*
+		Body{
+			Type:   "box",
+			Layout: "vertical",
+			Contents: []Content{
+				{ * NewContentMoviePropertyで生成
+					Type:   "text",
+					Text:   "タイトル",
+					Weight: "bold",
+					Size:   "xl",
+					Wrap:   true,
+				},
+				{ * NewContentMovieValueで生成
+					Type:    "box",
+					Layout:  "vertical",
+					Margin:  "lg",
+					Spacing: "sm",
+					Contents: []Content{
+						{ * NewContentBodyBlockChannelRootで生成
+							Type:   "box",
+							Layout: "baseline",
+							Contents: []Content{
+								{ * NewContentBodyBlockChannelPropertyValueで生成
+									Type:  "text",
+									Text:  "ch",
+									Flex:  1,
+									Wrap:  true,
+									Size:  "sm",
+									Color: "#aaaaaa",
+								},
+								{ * NewContentBodyBlockChannelPropertyValueで生成
+									Type:  "text",
+									Text:  channelName,
+									Flex:  5,
+									Wrap:  true,
+									Size:  "sm",
+									Color: "#aaaaaa",
+								},
+							},
+						},
+						{ * NewContentBodyBlockUrlRootで生成
+							Type:    "box",
+							Layout:  "baseline",
+							Spacing: "sm",
+							Contents: []Content{
+								{ * NewContentBodyBlockUrlPropertyで生成
+									Type:  "text",
+									Text:  "URL",
+									Color: "#aaaaaa",
+									Size:  "sm",
+									Flex:  1,
+								},
+								{ * NewContentBodyBlockUrlValueで生成
+									Type:  "text",
+									Text:  "動画はこちらをタップ",
+									Wrap:  true,
+									Color: "#666666",
+									Size:  "sm",
+									Flex:  5,
+									Action: &model.Action{
+										Type: "uri",
+										Uri:  videoURL,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		}
+	*/
+
 }
 
 func NewContentMovieProperty(contentType string, movieTitle string, weight string, size string, wrap bool) *Content {

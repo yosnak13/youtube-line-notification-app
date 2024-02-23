@@ -55,7 +55,7 @@ func handler() {
 		}
 	}
 
-	sampleMessage := buildJson()
+	sampleMessage := buildMessage()
 	messageJSON, err := json.Marshal(sampleMessage)
 	if err != nil {
 		fmt.Println("JSON marshal error:", err)
@@ -69,40 +69,25 @@ func main() {
 	lambda.Start(handler)
 }
 
-// MEMO: 徐々に切り出していく
-
-type Message struct {
-	Type   string        `json:"type"`
-	Hero   *model.Hero   `json:"hero"`
-	Body   *model.Body   `json:"body"`
-	Footer *model.Footer `json:"footer"`
-}
-
-func buildJson() *Message {
+func buildMessage() *model.Message {
 	hero := buildHero()
 	body := buildBody()
 	footer := buildFooter()
 
-	return &Message{
-		Type:   "bubble",
-		Hero:   hero,
-		Body:   body,
-		Footer: footer,
-	}
+	message := *model.NewMessage("bubble", hero, body, footer)
+	return &message
 }
 
 func buildHero() *model.Hero {
 	thumbnailURL := "https://example.com"
 
-	typeOfAction := "uri"
-	uri := "https://youtube.com"
-	action := *model.NewAction(typeOfAction, "", uri)
+	movieURL := "https://youtube.com"
+	action := *model.NewAction("uri", "", movieURL)
 	hero := *model.NewHero("image", thumbnailURL, "full", "20:30", "cover", &action)
 	return &hero
 }
 
 func buildBody() *model.Body {
-
 	videoURL := "https://www.youtube.com"
 	channelName := "channelTitle"
 
@@ -124,100 +109,14 @@ func buildBody() *model.Body {
 
 	bodyComponents := []*model.Content{&titleComponent, &movieComponent}
 
-	return &model.Body{
-		Type:     "box",
-		Layout:   "vertical",
-		Contents: bodyComponents,
-	}
-
-	//return &Body{
-	//	Type:   "box",
-	//	Layout: "vertical",
-	//	Contents: []Content{
-	//		{
-	//			Type:   "text",
-	//			Text:   "タイトル",
-	//			Weight: "bold",
-	//			Size:   "xl",
-	//			Wrap:   true,
-	//		},
-	//		{
-	//			Type:    "box",
-	//			Layout:  "vertical",
-	//			Margin:  "lg",
-	//			Spacing: "sm",
-	//			Contents: []Content{
-	//				{
-	//					Type:   "box",
-	//					Layout: "baseline",
-	//					Contents: []Content{
-	//						{
-	//							Type:  "text",
-	//							Text:  "ch",
-	//							Flex:  1,
-	//							Wrap:  true,
-	//							Size:  "sm",
-	//							Color: "#aaaaaa",
-	//						},
-	//						{
-	//							Type:  "text",
-	//							Text:  channelName,
-	//							Flex:  5,
-	//							Wrap:  true,
-	//							Size:  "sm",
-	//							Color: "#aaaaaa",
-	//						},
-	//					},
-	//				},
-	//				{
-	//					Type:    "box",
-	//					Layout:  "baseline",
-	//					Spacing: "sm",
-	//					Contents: []Content{
-	//						{
-	//							Type:  "text",
-	//							Text:  "URL",
-	//							Color: "#aaaaaa",
-	//							Size:  "sm",
-	//							Flex:  1,
-	//						},
-	//						{
-	//							Type:  "text",
-	//							Text:  "動画はこちらをタップ",
-	//							Wrap:  true,
-	//							Color: "#666666",
-	//							Size:  "sm",
-	//							Flex:  5,
-	//							Action: &model.Action{
-	//								Type: "uri",
-	//								Uri:  videoURL,
-	//							},
-	//						},
-	//					},
-	//				},
-	//			},
-	//		},
-	//	},
-	//}
+	body := *model.NewBody("box", "vertical", bodyComponents)
+	return &body
 }
 
 func buildFooter() *model.Footer {
-	typeOfAction := "uri"
-	label := "Youtubeトップへ"
-	uri := "https://youtube.com"
-	action := *model.NewAction(typeOfAction, label, uri)
-
-	typeOfFooterContent := "button"
-	style := "link"
-	height := "sm"
-	footerContent := *model.NewFooterContent(typeOfFooterContent, style, height, &action)
-
-	typeOfFooter := "box"
-	layout := "vertical"
-	spacing := "sm"
+	action := *model.NewAction("uri", "Youtubeトップへ", "https://youtube.com")
+	footerContent := *model.NewFooterContent("button", "link", "sm", &action)
 	content := []*model.FooterContent{&footerContent}
-	flex := 0
-
-	footer := *model.NewFooter(typeOfFooter, layout, spacing, content, flex)
+	footer := *model.NewFooter("box", "vertical", "sm", content, 0)
 	return &footer
 }

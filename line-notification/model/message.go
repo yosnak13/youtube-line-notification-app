@@ -7,11 +7,11 @@ type Message struct {
 	Footer *Footer `json:"footer"`
 }
 
-func NewMessage(hero Hero, body Body, footer Footer) *Message {
+func NewMessage(contentType string, hero *Hero, body *Body, footer *Footer) *Message {
 	return &Message{
-		Type:   "bubble",
-		Hero:   &hero,
-		Body:   &body,
-		Footer: &footer,
+		Type:   contentType,
+		Hero:   hero,
+		Body:   body,
+		Footer: footer,
 	}
 }

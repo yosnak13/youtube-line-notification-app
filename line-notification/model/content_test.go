@@ -35,7 +35,7 @@ func TestNewContentMovieValue(t *testing.T) {
 		content := &Content{
 			Type:  "text",
 			Text:  "ch",
-			Flex:  i,
+			Flex:  1,
 			Wrap:  true,
 			Size:  "sm",
 			Color: "aaaaaa",
@@ -55,6 +55,55 @@ func TestNewContentMovieValue(t *testing.T) {
 	assert.Equal(t, expect, actual)
 }
 
+func TestNewContentBodyBlockChannelRoot(t *testing.T) {
+	contentType := "box"
+	layout := "baseline"
+	var contents []*Content
+	for i := 0; i < 2; i++ {
+		content := &Content{
+			Type:  "text",
+			Text:  "ch",
+			Flex:  1,
+			Wrap:  true,
+			Size:  "sm",
+			Color: "aaaaaa",
+		}
+		contents = append(contents, content)
+	}
+
+	expect := &Content{
+		Type:     contentType,
+		Layout:   layout,
+		Contents: contents,
+	}
+
+	actual := NewContentBodyBlockChannelRoot(contentType, layout, contents)
+
+	assert.Equal(t, expect, actual)
+}
+
+func TestNewContentBodyBlockChannelPropertyValue(t *testing.T) {
+	contentType := "text"
+	text := "ch"
+	flex := 1
+	wrap := true
+	size := "sm"
+	color := "aaaaaa"
+
+	expect := &Content{
+		Type:  contentType,
+		Text:  text,
+		Flex:  flex,
+		Wrap:  wrap,
+		Size:  size,
+		Color: color,
+	}
+
+	actual := NewContentBodyBlockChannelPropertyValue(contentType, text, flex, wrap, size, color)
+
+	assert.Equal(t, expect, actual)
+}
+
 func TestNewContentBodyBlockUrlRoot(t *testing.T) {
 	contentType := "box"
 	layout := "baseline"
@@ -64,7 +113,7 @@ func TestNewContentBodyBlockUrlRoot(t *testing.T) {
 		content := &Content{
 			Type:  "text",
 			Text:  "ch",
-			Flex:  i,
+			Flex:  1,
 			Wrap:  true,
 			Size:  "sm",
 			Color: "aaaaaa",
