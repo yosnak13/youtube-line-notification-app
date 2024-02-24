@@ -1,13 +1,13 @@
 package model
 
 type Carousel struct {
-	Type             string     `json:"type"`
-	CarouselContents []*Message `json:"contents"`
+	Type    string    `json:"type"`
+	Bubbles []*Bubble `json:"contents"`
 }
 
-func NewCarousel(contentType string, messages []*Message) *Carousel {
+func NewCarousel(contentType string, bubbles []*Bubble) *Carousel {
 	return &Carousel{
-		Type:             contentType,
-		CarouselContents: messages,
+		Type:    contentType,
+		Bubbles: bubbles,
 	}
 }

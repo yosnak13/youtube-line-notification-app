@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestNewMessage(t *testing.T) {
+func TestNewBubble(t *testing.T) {
 	action := NewAction("test", "test", "test")
 	hero := NewHero("image", "https://example.com", "full", "20:30", "cover", action)
 
@@ -28,14 +28,14 @@ func TestNewMessage(t *testing.T) {
 
 	contentType := "bubble"
 
-	expect := &Message{
+	expect := &Bubble{
 		Type:   contentType,
 		Hero:   hero,
 		Body:   body,
 		Footer: footer,
 	}
 
-	actual := NewMessage(contentType, hero, body, footer)
+	actual := NewBubble(contentType, hero, body, footer)
 
 	assert.Equal(t, expect, actual)
 }
