@@ -5,10 +5,11 @@ import (
 	"testing"
 )
 
-func TestNewMessage(t *testing.T) {
+func TestNewCarousel(t *testing.T) {
+	contentType := "carousel"
+
 	action := NewAction("test", "test", "test")
 	hero := NewHero("image", "https://example.com", "full", "20:30", "cover", action)
-
 	var contents []*Content
 	for i := 0; i < 2; i++ {
 		content := &Content{
@@ -17,25 +18,23 @@ func TestNewMessage(t *testing.T) {
 			Flex:  i,
 			Wrap:  true,
 			Size:  "sm",
-			Color: "aaaaaa",
+			Color: "#aaaaaa",
 		}
 		contents = append(contents, content)
 	}
 	body := NewBody("type", "xl", contents)
-
 	footerContent := NewFooterContent("button", "link", "sm", action)
 	footer := NewFooter("box", "vertical", "sm", []*FooterContent{footerContent}, 1)
 
-	contentType := "bubble"
+	bubble := NewBubble("bubble", hero, body, footer)
+	bubbles := []*Bubble{bubble}
 
-	expect := &Message{
-		Type:   contentType,
-		Hero:   hero,
-		Body:   body,
-		Footer: footer,
+	expect := &Carousel{
+		Type:    contentType,
+		Bubbles: bubbles,
 	}
 
-	actual := NewMessage(contentType, hero, body, footer)
+	actual := NewCarousel(contentType, bubbles)
 
 	assert.Equal(t, expect, actual)
 }

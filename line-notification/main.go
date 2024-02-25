@@ -55,8 +55,8 @@ func handler() {
 		}
 	}
 
-	sampleMessage := buildMessage()
-	messageJSON, err := json.Marshal(sampleMessage)
+	bubble := buildBubble()
+	messageJSON, err := json.Marshal(bubble)
 	if err != nil {
 		fmt.Println("JSON marshal error:", err)
 		return
@@ -69,13 +69,13 @@ func main() {
 	lambda.Start(handler)
 }
 
-func buildMessage() *model.Message {
+func buildBubble() *model.Bubble {
 	hero := buildHero()
 	body := buildBody()
 	footer := buildFooter()
 
-	message := *model.NewMessage("bubble", hero, body, footer)
-	return &message
+	bubble := *model.NewBubble("bubble", hero, body, footer)
+	return &bubble
 }
 
 func buildHero() *model.Hero {
