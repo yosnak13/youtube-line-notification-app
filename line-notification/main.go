@@ -40,18 +40,17 @@ func handler() {
 			log.Fatalf("Error making search API call for channel %s: %v", channelID, err)
 		}
 
-		for _, item := range response.Items {
-			movieTitle := item.Snippet.Title
-			thumbnail := item.Snippet.Thumbnails
-			channelName := item.Snippet.ChannelTitle
-			videoID := item.Id.VideoId
+		item := response.Items[0] // MaxResultsが1なので、配列の最初の要素でよい
+		movieTitle := item.Snippet.Title
+		thumbnail := item.Snippet.Thumbnails
+		channelName := item.Snippet.ChannelTitle
+		videoID := item.Id.VideoId
 
-			thumbnailURL := thumbnail.Default.Url
-			movieURL := fmt.Sprintf("https://www.youtube.com/watch?v=%s", videoID)
+		thumbnailURL := thumbnail.Default.Url
+		movieURL := fmt.Sprintf("https://www.youtube.com/watch?v=%s", videoID)
 
-			bubble := buildBubble(movieTitle, thumbnailURL, channelName, movieURL)
-			bubbles = append(bubbles, bubble)
-		}
+		bubble := buildBubble(movieTitle, thumbnailURL, channelName, movieURL)
+		bubbles = append(bubbles, bubble)
 	}
 
 	carousel := *model.NewCarousel("carousel", bubbles)
