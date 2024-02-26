@@ -31,6 +31,8 @@ func handler() {
 		log.Fatalf("Error creating new YouTube client: %v", err)
 	}
 
+	var bubbles []*model.Bubble
+
 	for _, channelID := range channelIDs {
 		call := service.Search.List([]string{"snippet"}).ChannelId(channelID).Type("video").Order("date").MaxResults(1)
 		response, err := call.Do()
@@ -39,29 +41,27 @@ func handler() {
 		}
 
 		for _, item := range response.Items {
-			videoTitle := item.Snippet.Title
-			thumbnails := item.Snippet.Thumbnails
-			channelTitle := item.Snippet.ChannelTitle
+			movieTitle := item.Snippet.Title
+			thumbnail := item.Snippet.Thumbnails
+			channelName := item.Snippet.ChannelTitle
 			videoID := item.Id.VideoId
 
-			fmt.Printf("Channel ID: %s\n", channelID)
-			fmt.Printf("Title: %s\n", videoTitle)
-			fmt.Printf("Thumbnail URL: %s\n", thumbnails.Default.Url)
-			fmt.Printf("Channel Name: %s\n", channelTitle)
-			videoURL := fmt.Sprintf("https://www.youtube.com/watch?v=%s", videoID)
-			fmt.Printf("Video URL: %s\n", videoURL)
+			thumbnailURL := thumbnail.Default.Url
+			movieURL := fmt.Sprintf("https://www.youtube.com/watch?v=%s", videoID)
 
-			fmt.Println()
+			bubble := buildBubble(movieTitle, thumbnailURL, channelName, movieURL)
+			bubbles = append(bubbles, bubble)
 		}
 	}
 
-	bubble := buildBubble()
-	messageJSON, err := json.Marshal(bubble)
+	carousel := *model.NewCarousel("carousel", bubbles)
+	flexMessage := *model.NewFlexMessage("flex", "本日の動画です。", &carousel)
+
+	messageJSON, err := json.Marshal(flexMessage)
 	if err != nil {
 		fmt.Println("JSON marshal error:", err)
 		return
 	}
-
 	fmt.Println(string(messageJSON))
 }
 
@@ -69,43 +69,37 @@ func main() {
 	lambda.Start(handler)
 }
 
-func buildBubble() *model.Bubble {
-	hero := buildHero()
-	body := buildBody()
+func buildBubble(movieTitle string, thumbnailURL string, channelTitle string, movieURL string) *model.Bubble {
+	hero := buildHero(thumbnailURL, movieURL)
+	body := buildBody(movieTitle, channelTitle, movieURL)
 	footer := buildFooter()
 
 	bubble := *model.NewBubble("bubble", hero, body, footer)
 	return &bubble
 }
 
-func buildHero() *model.Hero {
-	thumbnailURL := "https://example.com"
-
-	movieURL := "https://youtube.com"
+func buildHero(thumbnailURL string, movieURL string) *model.Hero {
 	action := *model.NewAction("uri", "", movieURL)
 	hero := *model.NewHero("image", thumbnailURL, "full", "20:30", "cover", &action)
 	return &hero
 }
 
-func buildBody() *model.Body {
-	videoURL := "https://www.youtube.com"
-	channelName := "channelTitle"
-
+func buildBody(movieTitle string, channelTitle string, movieURL string) *model.Body {
 	urlProperty := *model.NewContentBodyBlockUrlProperty("text", "URL", "#aaaaaa", "sm", 1)
-	urlValueAction := *model.NewAction("url", "", videoURL)
+	urlValueAction := *model.NewAction("url", "", movieURL)
 	urlValue := *model.NewContentBodyBlockUrlValue("text", "動画はこちらをタップ", true, "#666666", "sm", 5, &urlValueAction)
 	urlComponents := []*model.Content{&urlProperty, &urlValue}
 	urlRootComponent := *model.NewContentBodyBlockUrlRoot("box", "baseline", "sm", urlComponents)
 
 	channelProperty := *model.NewContentBodyBlockChannelPropertyValue("text", "ch", 1, true, "sm", "#aaaaaa")
-	channelValue := *model.NewContentBodyBlockChannelPropertyValue("text", channelName, 5, true, "sm", "#aaaaaa")
+	channelValue := *model.NewContentBodyBlockChannelPropertyValue("text", channelTitle, 5, true, "sm", "#aaaaaa")
 	channelNameComponents := []*model.Content{&channelProperty, &channelValue}
 	channelRootComponent := *model.NewContentBodyBlockChannelRoot("box", "baseline", channelNameComponents)
 
 	movieInfo := []*model.Content{&channelRootComponent, &urlRootComponent}
 
 	movieComponent := *model.NewContentMovieValue("box", "vertical", "lg", "sm", movieInfo)
-	titleComponent := *model.NewContentMovieProperty("text", "動画のタイトル", "bold", "xl", true)
+	titleComponent := *model.NewContentMovieProperty("text", movieTitle, "bold", "xl", true)
 
 	bodyComponents := []*model.Content{&titleComponent, &movieComponent}
 

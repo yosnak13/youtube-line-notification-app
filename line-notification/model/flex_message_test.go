@@ -10,8 +10,8 @@ func TestNewFlexMessage(t *testing.T) {
 	contentType := "flex"
 	altText := "本日の動画です。"
 
-	var carousels []*Carousel
 	var contents []*Content
+	var bubbles []*Bubble
 	for i := 0; i < 2; i++ {
 		action := NewAction("test", "test", "test")
 		url := fmt.Sprintf("https://example.com/%v", i)
@@ -33,19 +33,16 @@ func TestNewFlexMessage(t *testing.T) {
 		footer := NewFooter("box", "vertical", "sm", []*FooterContent{footerContent}, 1)
 
 		bubble := NewBubble("bubble", hero, body, footer)
-		bubbles := []*Bubble{bubble}
-
-		carousel := NewCarousel("carousel", bubbles)
-		carousels = append(carousels, carousel)
+		bubbles = append(bubbles, bubble)
 	}
-
+	carousel := NewCarousel("carousel", bubbles)
 	expect := &FlexMessage{
 		Type:     contentType,
 		AltText:  altText,
-		Carousel: carousels,
+		Carousel: carousel,
 	}
 
-	actual := NewFlexMessage(contentType, altText, carousels)
+	actual := NewFlexMessage(contentType, altText, carousel)
 
 	assert.Equal(t, expect, actual)
 }
