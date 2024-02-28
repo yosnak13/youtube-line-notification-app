@@ -131,7 +131,7 @@ func sendMessage(messageJSON []byte) error {
 		return err
 	}
 
-	flexMessage := linebot.NewFlexMessage("Flex Message", flexContainer)
+	flexMessage := linebot.NewFlexMessage("本日の動画です！", flexContainer)
 	if _, err := bot.BroadcastMessage(flexMessage).Do(); err != nil {
 		log.Fatal(err)
 		return err
