@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"google.golang.org/api/youtube/v3"
 	"line-notification/model"
 	"log"
@@ -54,14 +55,17 @@ func handler() {
 	}
 
 	carousel := *model.NewCarousel("carousel", bubbles)
-	flexMessage := *model.NewFlexMessage("flex", "本日の動画です。", &carousel)
 
-	messageJSON, err := json.Marshal(flexMessage)
+	messageJSON, err := json.Marshal(carousel)
 	if err != nil {
 		fmt.Println("JSON marshal error:", err)
 		return
 	}
 	fmt.Println(string(messageJSON))
+
+	if err := sendMessage(messageJSON); err != nil {
+		log.Fatal(err)
+	}
 }
 
 func main() {
@@ -85,7 +89,7 @@ func buildHero(thumbnailURL string, movieURL string) *model.Hero {
 
 func buildBody(movieTitle string, channelTitle string, movieURL string) *model.Body {
 	urlProperty := *model.NewContentBodyBlockUrlProperty("text", "URL", "#aaaaaa", "sm", 1)
-	urlValueAction := *model.NewAction("url", "", movieURL)
+	urlValueAction := *model.NewAction("uri", "", movieURL)
 	urlValue := *model.NewContentBodyBlockUrlValue("text", "動画はこちらをタップ", true, "#666666", "sm", 5, &urlValueAction)
 	urlComponents := []*model.Content{&urlProperty, &urlValue}
 	urlRootComponent := *model.NewContentBodyBlockUrlRoot("box", "baseline", "sm", urlComponents)
@@ -112,4 +116,26 @@ func buildFooter() *model.Footer {
 	content := []*model.FooterContent{&footerContent}
 	footer := *model.NewFooter("box", "vertical", "sm", content, 0)
 	return &footer
+}
+
+func sendMessage(messageJSON []byte) error {
+	bot, err := linebot.New(os.Getenv("LineBotChannelSecret"), os.Getenv("LineBotChannelToken"))
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+
+	flexContainer, err := linebot.UnmarshalFlexMessageJSON(messageJSON)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+
+	flexMessage := linebot.NewFlexMessage("本日の動画です！", flexContainer)
+	if _, err := bot.BroadcastMessage(flexMessage).Do(); err != nil {
+		log.Fatal(err)
+		return err
+	}
+
+	return nil
 }
