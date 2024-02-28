@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"google.golang.org/api/youtube/v3"
 	"line-notification/model"
 	"log"
@@ -62,6 +63,10 @@ func handler() {
 		return
 	}
 	fmt.Println(string(messageJSON))
+
+	if err := sendMessage(messageJSON); err != nil {
+		log.Fatal(err)
+	}
 }
 
 func main() {
@@ -112,4 +117,26 @@ func buildFooter() *model.Footer {
 	content := []*model.FooterContent{&footerContent}
 	footer := *model.NewFooter("box", "vertical", "sm", content, 0)
 	return &footer
+}
+
+func sendMessage(messageJSON []byte) error {
+	bot, err := linebot.New(os.Getenv("LineBotChannelSecret"), os.Getenv("LineBotChannelToken"))
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+
+	flexContainer, err := linebot.UnmarshalFlexMessageJSON(messageJSON)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+
+	flexMessage := linebot.NewFlexMessage("Flex Message", flexContainer)
+	if _, err := bot.BroadcastMessage(flexMessage).Do(); err != nil {
+		log.Fatal(err)
+		return err
+	}
+
+	return nil
 }

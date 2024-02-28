@@ -24,6 +24,8 @@ Resources:
       Environment:
         Variables:
           API_KEY: ## 自分のAPIキーを入力（暫定対応）
+          LineBotChannelSecret: ## LINEのチャネルシークレット（暫定対応）
+          LineBotChannelToken:  ## LINEの（暫定対応）
       Events:
         ScheduledEventBridgeRule:
           Type: Schedule
