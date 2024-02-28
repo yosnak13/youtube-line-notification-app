@@ -61,10 +61,10 @@ func handler() {
 		fmt.Println("JSON marshal error:", err)
 		return
 	}
-	fmt.Println(string(messageJSON))
 
 	if err := sendMessage(messageJSON); err != nil {
 		log.Fatal(err)
+		return
 	}
 }
 
@@ -121,19 +121,16 @@ func buildFooter() *model.Footer {
 func sendMessage(messageJSON []byte) error {
 	bot, err := linebot.New(os.Getenv("LineBotChannelSecret"), os.Getenv("LineBotChannelToken"))
 	if err != nil {
-		log.Fatal(err)
 		return err
 	}
 
 	flexContainer, err := linebot.UnmarshalFlexMessageJSON(messageJSON)
 	if err != nil {
-		log.Fatal(err)
 		return err
 	}
 
 	flexMessage := linebot.NewFlexMessage("本日の動画です！", flexContainer)
 	if _, err := bot.BroadcastMessage(flexMessage).Do(); err != nil {
-		log.Fatal(err)
 		return err
 	}
 
