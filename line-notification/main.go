@@ -55,9 +55,8 @@ func handler() {
 	}
 
 	carousel := *model.NewCarousel("carousel", bubbles)
-	flexMessage := *model.NewFlexMessage("flex", "本日の動画です。", &carousel)
 
-	messageJSON, err := json.Marshal(flexMessage)
+	messageJSON, err := json.Marshal(carousel)
 	if err != nil {
 		fmt.Println("JSON marshal error:", err)
 		return
@@ -90,7 +89,7 @@ func buildHero(thumbnailURL string, movieURL string) *model.Hero {
 
 func buildBody(movieTitle string, channelTitle string, movieURL string) *model.Body {
 	urlProperty := *model.NewContentBodyBlockUrlProperty("text", "URL", "#aaaaaa", "sm", 1)
-	urlValueAction := *model.NewAction("url", "", movieURL)
+	urlValueAction := *model.NewAction("uri", "", movieURL)
 	urlValue := *model.NewContentBodyBlockUrlValue("text", "動画はこちらをタップ", true, "#666666", "sm", 5, &urlValueAction)
 	urlComponents := []*model.Content{&urlProperty, &urlValue}
 	urlRootComponent := *model.NewContentBodyBlockUrlRoot("box", "baseline", "sm", urlComponents)
