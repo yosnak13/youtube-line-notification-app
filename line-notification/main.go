@@ -19,6 +19,7 @@ func handler() {
 		"UCPVr7clenPjpD7WNsSI3UBQ", // レトルト
 		"UCZMRuagdTBKmmrFtSMN48Xw", // 牛沢
 		"UCWcEgYIOqq1BVr4Qm1sPuVg", // ガッチマン
+		"UCcAGc7BqTIyEjeXZM6QhGiQ", // towaco
 		// 追加のチャンネルIDをここに追加
 	}
 
@@ -83,7 +84,7 @@ func buildBubble(movieTitle string, thumbnailURL string, channelTitle string, mo
 
 func buildHero(thumbnailURL string, movieURL string) *model.Hero {
 	action := *model.NewAction("uri", "", movieURL)
-	hero := *model.NewHero("image", thumbnailURL, "full", "20:30", "cover", &action)
+	hero := *model.NewHero("image", thumbnailURL, "full", "1:1", "cover", &action)
 	return &hero
 }
 
