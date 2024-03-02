@@ -96,7 +96,7 @@ func buildBody(movieTitle string, channelTitle string, movieURL string) *model.B
 	urlRootComponent := *model.NewContentBodyBlockUrlRoot("box", "baseline", "sm", urlComponents)
 
 	channelProperty := *model.NewContentBodyBlockChannelPropertyValue("text", "ch", 1, true, "sm", "#aaaaaa")
-	channelValue := *model.NewContentBodyBlockChannelPropertyValue("text", channelTitle, 5, true, "sm", "#aaaaaa")
+	channelValue := *model.NewContentBodyBlockChannelPropertyValue("text", channelTitle, 5, true, "sm", "#666666")
 	channelNameComponents := []*model.Content{&channelProperty, &channelValue}
 	channelRootComponent := *model.NewContentBodyBlockChannelRoot("box", "baseline", channelNameComponents)
 

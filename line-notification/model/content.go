@@ -96,6 +96,14 @@ type Content struct {
 
 }
 
+const (
+	typeText      string = "text"
+	wrap          bool   = true
+	contentSizeSM string = "sm"
+	colorGray     string = "#aaaaaa"
+	colorDarkGray string = "#666666"
+)
+
 func NewContentMovieProperty(contentType string, movieTitle string, weight string, size string, wrap bool) *Content {
 	return &Content{
 		Type:   contentType,
