@@ -19,6 +19,7 @@ func handler() {
 		"UCPVr7clenPjpD7WNsSI3UBQ", // レトルト
 		"UCZMRuagdTBKmmrFtSMN48Xw", // 牛沢
 		"UCWcEgYIOqq1BVr4Qm1sPuVg", // ガッチマン
+		"UCcAGc7BqTIyEjeXZM6QhGiQ", // towaco
 		// 追加のチャンネルIDをここに追加
 	}
 
@@ -61,10 +62,10 @@ func handler() {
 		fmt.Println("JSON marshal error:", err)
 		return
 	}
-	fmt.Println(string(messageJSON))
 
 	if err := sendMessage(messageJSON); err != nil {
 		log.Fatal(err)
+		return
 	}
 }
 
@@ -83,7 +84,7 @@ func buildBubble(movieTitle string, thumbnailURL string, channelTitle string, mo
 
 func buildHero(thumbnailURL string, movieURL string) *model.Hero {
 	action := *model.NewAction("uri", "", movieURL)
-	hero := *model.NewHero("image", thumbnailURL, "full", "20:30", "cover", &action)
+	hero := *model.NewHero("image", thumbnailURL, "full", "1:1", "cover", &action)
 	return &hero
 }
 
@@ -95,7 +96,7 @@ func buildBody(movieTitle string, channelTitle string, movieURL string) *model.B
 	urlRootComponent := *model.NewContentBodyBlockUrlRoot("box", "baseline", "sm", urlComponents)
 
 	channelProperty := *model.NewContentBodyBlockChannelPropertyValue("text", "ch", 1, true, "sm", "#aaaaaa")
-	channelValue := *model.NewContentBodyBlockChannelPropertyValue("text", channelTitle, 5, true, "sm", "#aaaaaa")
+	channelValue := *model.NewContentBodyBlockChannelPropertyValue("text", channelTitle, 5, true, "sm", "#666666")
 	channelNameComponents := []*model.Content{&channelProperty, &channelValue}
 	channelRootComponent := *model.NewContentBodyBlockChannelRoot("box", "baseline", channelNameComponents)
 
@@ -121,19 +122,16 @@ func buildFooter() *model.Footer {
 func sendMessage(messageJSON []byte) error {
 	bot, err := linebot.New(os.Getenv("LineBotChannelSecret"), os.Getenv("LineBotChannelToken"))
 	if err != nil {
-		log.Fatal(err)
 		return err
 	}
 
 	flexContainer, err := linebot.UnmarshalFlexMessageJSON(messageJSON)
 	if err != nil {
-		log.Fatal(err)
 		return err
 	}
 
 	flexMessage := linebot.NewFlexMessage("本日の動画です！", flexContainer)
 	if _, err := bot.BroadcastMessage(flexMessage).Do(); err != nil {
-		log.Fatal(err)
 		return err
 	}
 
