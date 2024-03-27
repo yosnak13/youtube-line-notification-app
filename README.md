@@ -3,9 +3,10 @@
 ## Youtube通知アプリ
 
 気に入ったYoutubeチャンネルに動画がアップロードされた時、LINEに通知するサービス。  
-毎時17:30に、LINEへ通知する。(下記gifは開発中のもの)
+毎時17:30に、LINEへ通知する。
 
-![](../../Downloads/RPReplay_Final1711515036.gif)
+![RPReplay_Final1711515036](https://github.com/yosnak13/youtube-line-notification-app/assets/64535376/f6427cc3-e56b-40d7-9c2e-c911174d5a38)
+
 
 ## 開発背景
 
