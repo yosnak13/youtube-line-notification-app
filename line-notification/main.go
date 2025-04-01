@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"google.golang.org/api/youtube/v3"
 	"line-notification/model"
@@ -10,9 +11,32 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/aws/aws-lambda-go/lambda"
 	"google.golang.org/api/googleapi/transport"
 )
+
+const (
+	Blank                  string = ""
+	ContentUri             string = "uri"
+	ContentUrlLarge        string = "URL"
+	ContentImg             string = "image"
+	ContentText            string = "text"
+	ContentBox             string = "box"
+	SpaceSmall             string = "sm"
+	SrgbGray               string = "#aaaaaa"
+	LayoutBaseLine         string = "baseline"
+	LayoutVertical         string = "vertical"
+	FlexOne                int    = 1
+	FlexFive               int    = 5
+	NoFlex                 int    = 0
+	IsWrap                 bool   = true
+	AnnounceTodayMovie     string = "本日の動画です"
+	AnnounceTapHere        string = "動画はこちらをタップ"
+	AnnounceGoTopOfYouTube string = "Youtubeトップへ"
+)
+
+func main() {
+	lambda.Start(handler)
+}
 
 func handler() {
 	channelIDs := []string{
@@ -55,13 +79,14 @@ func handler() {
 		bubbles = append(bubbles, bubble)
 	}
 
-	carousel := *model.NewCarousel("carousel", bubbles)
-
+	typeCarousel := "carousel"
+	carousel := *model.NewCarousel(typeCarousel, bubbles)
 	messageJSON, err := json.Marshal(carousel)
 	if err != nil {
 		fmt.Println("JSON marshal error:", err)
 		return
 	}
+	fmt.Printf("messageJson: %s", messageJSON)
 
 	if err := sendMessage(messageJSON); err != nil {
 		log.Fatal(err)
@@ -69,53 +94,66 @@ func handler() {
 	}
 }
 
-func main() {
-	lambda.Start(handler)
-}
-
 func buildBubble(movieTitle string, thumbnailURL string, channelTitle string, movieURL string) *model.Bubble {
 	hero := buildHero(thumbnailURL, movieURL)
 	body := buildBody(movieTitle, channelTitle, movieURL)
 	footer := buildFooter()
 
-	bubble := *model.NewBubble("bubble", hero, body, footer)
+	typeBubble := "bubble"
+	bubble := *model.NewBubble(typeBubble, hero, body, footer)
 	return &bubble
 }
 
 func buildHero(thumbnailURL string, movieURL string) *model.Hero {
-	action := *model.NewAction("uri", "", movieURL)
-	hero := *model.NewHero("image", thumbnailURL, "full", "1:1", "cover", &action)
+	fullSize := "full"
+	aspect := "1:1"
+	aspectMode := "cover"
+
+	action := *model.NewAction(ContentUri, Blank, movieURL)
+	hero := *model.NewHero(ContentImg, thumbnailURL, fullSize, aspect, aspectMode, &action)
 	return &hero
 }
 
 func buildBody(movieTitle string, channelTitle string, movieURL string) *model.Body {
-	urlProperty := *model.NewContentBodyBlockUrlProperty("text", "URL", "#aaaaaa", "sm", 1)
-	urlValueAction := *model.NewAction("uri", "", movieURL)
-	urlValue := *model.NewContentBodyBlockUrlValue("text", "動画はこちらをタップ", true, "#666666", "sm", 5, &urlValueAction)
-	urlComponents := []*model.Content{&urlProperty, &urlValue}
-	urlRootComponent := *model.NewContentBodyBlockUrlRoot("box", "baseline", "sm", urlComponents)
+	urlProperty := *model.NewContentBodyBlockUrlProperty(ContentText, ContentUrlLarge, SrgbGray, SpaceSmall, FlexOne)
 
-	channelProperty := *model.NewContentBodyBlockChannelPropertyValue("text", "ch", 1, true, "sm", "#aaaaaa")
-	channelValue := *model.NewContentBodyBlockChannelPropertyValue("text", channelTitle, 5, true, "sm", "#666666")
+	typeUrlSmall := "url"
+	urlValueAction := *model.NewAction(typeUrlSmall, Blank, movieURL)
+
+	darkGray := "#666666"
+	urlValue := *model.NewContentBodyBlockUrlValue(ContentText, AnnounceTapHere, IsWrap, darkGray, SpaceSmall, FlexFive, &urlValueAction)
+	urlComponents := []*model.Content{&urlProperty, &urlValue}
+	urlRootComponent := *model.NewContentBodyBlockUrlRoot(ContentBox, LayoutBaseLine, SpaceSmall, urlComponents)
+
+	textChannel := "ch"
+	channelProperty := *model.NewContentBodyBlockChannelPropertyValue(ContentText, textChannel, FlexOne, IsWrap, SpaceSmall, SrgbGray)
+	channelValue := *model.NewContentBodyBlockChannelPropertyValue(ContentText, channelTitle, FlexFive, IsWrap, SpaceSmall, SrgbGray)
 	channelNameComponents := []*model.Content{&channelProperty, &channelValue}
-	channelRootComponent := *model.NewContentBodyBlockChannelRoot("box", "baseline", channelNameComponents)
+	channelRootComponent := *model.NewContentBodyBlockChannelRoot(ContentBox, LayoutBaseLine, channelNameComponents)
 
 	movieInfo := []*model.Content{&channelRootComponent, &urlRootComponent}
 
-	movieComponent := *model.NewContentMovieValue("box", "vertical", "lg", "sm", movieInfo)
-	titleComponent := *model.NewContentMovieProperty("text", movieTitle, "bold", "xl", true)
+	largeMargin := "lg"
+	movieComponent := *model.NewContentMovieValue(ContentBox, LayoutVertical, largeMargin, SpaceSmall, movieInfo)
+	fontWeightBold := "bold"
+	sizeXl := "xl"
+	titleComponent := *model.NewContentMovieProperty(ContentText, movieTitle, fontWeightBold, sizeXl, IsWrap)
 
 	bodyComponents := []*model.Content{&titleComponent, &movieComponent}
 
-	body := *model.NewBody("box", "vertical", bodyComponents)
+	body := *model.NewBody(ContentBox, LayoutVertical, bodyComponents)
 	return &body
 }
 
 func buildFooter() *model.Footer {
-	action := *model.NewAction("uri", "Youtubeトップへ", "https://youtube.com")
-	footerContent := *model.NewFooterContent("button", "link", "sm", &action)
+	youTubeTopURL := "https://youtube.com"
+	action := *model.NewAction(ContentUri, AnnounceGoTopOfYouTube, youTubeTopURL)
+
+	typeButton := "button"
+	styleLink := "link"
+	footerContent := *model.NewFooterContent(typeButton, styleLink, SpaceSmall, &action)
 	content := []*model.FooterContent{&footerContent}
-	footer := *model.NewFooter("box", "vertical", "sm", content, 0)
+	footer := *model.NewFooter(ContentBox, LayoutVertical, SpaceSmall, content, NoFlex)
 	return &footer
 }
 

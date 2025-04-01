@@ -15,3 +15,19 @@ func NewFooterContent(footerType string, style string, height string, action *Ac
 		Action: action,
 	}
 }
+
+func (f FooterContent) getType() string {
+	return f.Type
+}
+
+func (f FooterContent) getStyle() string {
+	return f.Style
+}
+
+func (f FooterContent) getHeight() string {
+	return f.Height
+}
+
+func (f FooterContent) getAction() *Action {
+	return f.Action
+}

@@ -10,7 +10,7 @@ func TestNewFooterContent(t *testing.T) {
 	typeOfAction := "uri"
 	label := "Youtubeトップへ"
 	uri := "https://youtube.com"
-	action := NewAction(typeOfAction, label, uri) // ポインターを解除して渡すことで、expectとactualが使用する関数が同じアドレスの物になるようにする
+	action := *NewAction(typeOfAction, label, uri)
 
 	typeOfFooterContent := "button"
 	style := "link"
@@ -20,10 +20,13 @@ func TestNewFooterContent(t *testing.T) {
 		Type:   typeOfFooterContent,
 		Style:  style,
 		Height: height,
-		Action: action,
+		Action: &action,
 	}
 
-	actual := NewFooterContent(typeOfFooterContent, style, height, action)
+	actual := NewFooterContent(typeOfFooterContent, style, height, &action)
 
-	assert.Equal(t, expect, actual)
+	assert.Equal(t, expect.getHeight(), actual.getHeight())
+	assert.Equal(t, expect.getStyle(), actual.getStyle())
+	assert.Equal(t, expect.getType(), actual.getType())
+	assert.Equal(t, expect.getAction(), actual.getAction())
 }
