@@ -1,12 +1,11 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"google.golang.org/api/youtube/v3"
 	"line-notification/model"
+	"line-notification/model/line_bot"
 	"log"
 	"net/http"
 	"os"
@@ -82,17 +81,9 @@ func handler() {
 
 	typeCarousel := "carousel"
 	carousel := *model.NewCarousel(typeCarousel, bubbles)
-	messageJSON, err := json.Marshal(carousel)
-	if err != nil {
-		fmt.Println("JSON marshal error:", err)
-		return
-	}
-	fmt.Printf("messageJson: %s", messageJSON)
 
-	if err := sendMessage(messageJSON); err != nil {
-		log.Fatal(err)
-		return
-	}
+	bot, _ := line_bot.NewLineBotClient(os.Getenv("LineBotChannelSecret"), os.Getenv("LineBotChannelToken"))
+	err = carousel.RequestLineMessagingAPI(bot)
 }
 
 func buildBubble(movieTitle string, thumbnailURL string, channelTitle string, movieURL string) *model.Bubble {
@@ -155,27 +146,4 @@ func buildFooter() *model.Footer {
 	content := []*model.FooterContent{&footerContent}
 	footer := *model.NewFooter(ContentBox, LayoutVertical, SpaceSmall, content, NoFlex)
 	return &footer
-}
-
-func sendMessage(messageJSON []byte) error {
-	bot, err := linebot.New(os.Getenv("LineBotChannelSecret"), os.Getenv("LineBotChannelToken"))
-	if err != nil {
-		fmt.Printf("failed to build linebot %s", err)
-		return err
-	}
-
-	flexContainer, err := linebot.UnmarshalFlexMessageJSON(messageJSON)
-	if err != nil {
-		fmt.Printf("failed to UnmarshalFlexMessageJSON %s", err)
-		return err
-	}
-
-	flexMessage := linebot.NewFlexMessage(AnnounceTodayMovie, flexContainer)
-	if _, err := bot.BroadcastMessage(flexMessage).Do(); err != nil {
-		fmt.Printf("failed to BroadcastMessage %s", err)
-		return err
-	}
-
-	fmt.Println("Messaging request is succeeded!")
-	return nil
 }

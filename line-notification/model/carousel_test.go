@@ -10,7 +10,6 @@ import (
 )
 
 func TestNewCarousel(t *testing.T) {
-
 	action := NewAction("test", "test", "test")
 	hero := NewHero("image", "https://example.com", "full", "20:30", "cover", action)
 	var contents []*Content
