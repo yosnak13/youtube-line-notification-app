@@ -118,8 +118,7 @@ func buildHero(thumbnailURL string, movieURL string) *model.Hero {
 func buildBody(movieTitle string, channelTitle string, movieURL string) *model.Body {
 	urlProperty := *model.NewContentBodyBlockUrlProperty(ContentText, ContentUrlLarge, SrgbGray, SpaceSmall, FlexOne)
 
-	typeUrlSmall := "url"
-	urlValueAction := *model.NewAction(typeUrlSmall, Blank, movieURL)
+	urlValueAction := *model.NewAction(ContentUri, Blank, movieURL)
 
 	darkGray := "#666666"
 	urlValue := *model.NewContentBodyBlockUrlValue(ContentText, AnnounceTapHere, IsWrap, darkGray, SpaceSmall, FlexFive, &urlValueAction)
@@ -161,16 +160,19 @@ func buildFooter() *model.Footer {
 func sendMessage(messageJSON []byte) error {
 	bot, err := linebot.New(os.Getenv("LineBotChannelSecret"), os.Getenv("LineBotChannelToken"))
 	if err != nil {
+		fmt.Printf("failed to build linebot %s", err)
 		return err
 	}
 
 	flexContainer, err := linebot.UnmarshalFlexMessageJSON(messageJSON)
 	if err != nil {
+		fmt.Printf("failed to UnmarshalFlexMessageJSON %s", err)
 		return err
 	}
 
 	flexMessage := linebot.NewFlexMessage(AnnounceTodayMovie, flexContainer)
 	if _, err := bot.BroadcastMessage(flexMessage).Do(); err != nil {
+		fmt.Printf("failed to BroadcastMessage %s", err)
 		return err
 	}
 
