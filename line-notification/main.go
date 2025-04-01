@@ -39,6 +39,7 @@ func main() {
 }
 
 func handler() {
+	// 暫定的に下手打ち。DynamoDBに移行する。
 	channelIDs := []string{
 		"UCPVr7clenPjpD7WNsSI3UBQ", // レトルト
 		"UCZMRuagdTBKmmrFtSMN48Xw", // 牛沢
@@ -168,10 +169,11 @@ func sendMessage(messageJSON []byte) error {
 		return err
 	}
 
-	flexMessage := linebot.NewFlexMessage("本日の動画です！", flexContainer)
+	flexMessage := linebot.NewFlexMessage(AnnounceTodayMovie, flexContainer)
 	if _, err := bot.BroadcastMessage(flexMessage).Do(); err != nil {
 		return err
 	}
 
+	fmt.Println("Messaging request is succeeded!")
 	return nil
 }
