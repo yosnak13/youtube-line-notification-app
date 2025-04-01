@@ -11,3 +11,5 @@ func NewCarousel(contentType string, bubbles []*Bubble) *Carousel {
 		Bubbles: bubbles,
 	}
 }
+
+// LINEへのコールアウトをここに実装
